@@ -18,7 +18,7 @@ usage:  racket convertmp3.rkt -h
 (require racket/system)
 
 (define (simplify f)
-   ;remove track number and space and dot from begining of file
+   ;remove track number and space and dot from begining of file name
   (let  ([m (regexp-match #rx"^[0-9. ]*(.*)" f)])
         (when m (list-ref  m 1 ))))
 
@@ -47,9 +47,10 @@ exemple:   racket convertmps3.rkt -r -i myinputdir  -o ~/test/mp3
                 [of     (path->string (build-path (pdirout) oname))]
                 [tmp    (path->string(path-add-suffix f ".wav"))]
                 [command (str "mplayer -ao pcm:file="  (~e tmp) " " (~e (path->string f))
-                              "; lame -h " (~e tmp) " " (~e of) "; rm -f " (~e tmp))])
+                              "; lame -h " (~e tmp) " " (~e of))])
            ;(displayln command)
            (system command)
+           (delete-file tmp)
    ))))
 
 (main)
